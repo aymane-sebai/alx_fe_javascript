@@ -1,11 +1,11 @@
 // Initialize the quotes array
 let quotes = [];
-let categories = new Set();
+let categories = [];
 
 // Save quotes and categories to local storage
 function saveQuotes() {
   localStorage.setItem("quotes", JSON.stringify(quotes));
-  localStorage.setItem("categories", JSON.stringify([...categories]));
+  localStorage.setItem("categories", JSON.stringify(categories));
 }
 
 // Load quotes and categories from local storage
@@ -18,7 +18,7 @@ function loadQuotes() {
   }
 
   if (storedCategories) {
-    categories = new Set(JSON.parse(storedCategories));
+    categories = JSON.parse(storedCategories);
   }
 }
 
@@ -48,7 +48,12 @@ function addQuote() {
   }
 
   quotes.push({ text: newQuoteText, category: newQuoteCategory });
-  categories.add(newQuoteCategory);
+
+  // Add the new category if it doesn't exist
+  if (!categories.includes(newQuoteCategory)) {
+    categories.push(newQuoteCategory);
+  }
+
   saveQuotes();
   populateCategories();
   alert("New quote added successfully!");
@@ -87,12 +92,9 @@ function filterQuotes() {
 
   const quoteDisplay = document.getElementById("quoteDisplay");
 
-  if (selectedCategory === "all") {
-    displayRandomQuote();
-    return;
-  }
-
-  const filteredQuotes = quotes.filter((quote) => quote.category === selectedCategory);
+  const filteredQuotes = selectedCategory === "all" 
+    ? quotes 
+    : quotes.filter((quote) => quote.category === selectedCategory);
 
   if (filteredQuotes.length === 0) {
     quoteDisplay.textContent = `No quotes available for the "${selectedCategory}" category.`;
@@ -126,7 +128,12 @@ function importFromJsonFile(event) {
       const importedQuotes = JSON.parse(event.target.result);
       if (Array.isArray(importedQuotes) && importedQuotes.every(q => q.text && q.category)) {
         quotes.push(...importedQuotes);
-        importedQuotes.forEach((quote) => categories.add(quote.category));
+        importedQuotes.forEach((quote) => {
+          if (!categories.includes(quote.category)) {
+            categories.push(quote.category);
+          }
+        });
+
         saveQuotes();
         populateCategories();
         alert("Quotes imported successfully!");

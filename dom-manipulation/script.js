@@ -33,7 +33,25 @@ function createAddQuoteForm() {
     return;
   }
 
-  // Add the new quote to the array
+  
+quotes.push({ text: newQuoteText, category: newQuoteCategory });
+
+  // Update the DOM dynamically
+  const quoteDisplay = document.getElementById('quoteDisplay');
+
+  // Clear previous content
+  quoteDisplay.innerHTML = '';
+
+  // Create elements dynamically
+  const quoteTextElement = document.createElement('strong');
+  quoteTextElement.textContent = newQuoteText;
+
+  const categoryElement = document.createElement('em');
+  categoryElement.textContent = `— ${newQuoteCategory}`;
+
+  
+  quoteDisplay.appendChild(quoteTextElement);
+  quoteDisplay.appendChild(document.createElement('br'));// Add the new quote to the array
   quotes.push({ text: newQuoteText, category: newQuoteCategory });
 
   // Clear the input fields

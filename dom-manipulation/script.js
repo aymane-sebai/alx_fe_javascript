@@ -128,7 +128,12 @@ async function syncQuotes() {
 }
 
 // Show notifications
+// Show notifications
 function showNotification(message, color) {
+  // Alert for immediate feedback
+  alert(message);
+
+  // Optional: Use the existing syncStatus element for on-screen notifications
   const syncStatus = document.getElementById("syncStatus");
   syncStatus.textContent = message;
   syncStatus.style.color = color;
@@ -138,6 +143,7 @@ function showNotification(message, color) {
     syncStatus.textContent = "";
   }, 3000);
 }
+
 
 // Initialize the app
 document.addEventListener("DOMContentLoaded", () => {

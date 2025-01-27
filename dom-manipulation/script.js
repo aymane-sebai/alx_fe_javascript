@@ -1,4 +1,4 @@
-// Simulated server URL (use JSONPlaceholder or another API for real implementation)
+// Simulated server URL (use JSONPlaceholder or another mock API for real implementation)
 const serverUrl = "https://jsonplaceholder.typicode.com/posts";
 
 // Array of quotes
@@ -68,14 +68,14 @@ function addQuote() {
     alert("New quote added successfully!");
 
     // Sync with the server
-    syncDataToServer();
+    syncQuotes();
   } else {
     alert("Please fill out both fields.");
   }
 }
 
-// Function to fetch data from the server
-async function fetchDataFromServer() {
+// Fetch data from the server
+async function fetchQuotesFromServer() {
   try {
     const response = await fetch(serverUrl);
     const serverData = await response.json();
@@ -101,8 +101,8 @@ async function fetchDataFromServer() {
   }
 }
 
-// Function to sync data to the server
-async function syncDataToServer() {
+// Sync local data with the server
+async function syncQuotes() {
   try {
     const newQuotes = quotes.map(quote => ({
       title: quote.text,
@@ -123,6 +123,9 @@ async function syncDataToServer() {
   }
 }
 
+// Periodically check for new quotes from the server
+setInterval(fetchQuotesFromServer, 30000); // Sync every 30 seconds
+
 // Initialize the application
 window.addEventListener("DOMContentLoaded", async () => {
   // Load initial quotes
@@ -132,7 +135,7 @@ window.addEventListener("DOMContentLoaded", async () => {
   ];
 
   // Fetch data from the server
-  await fetchDataFromServer();
+  await fetchQuotesFromServer();
 
   // Populate categories and display initial quotes
   populateCategories();

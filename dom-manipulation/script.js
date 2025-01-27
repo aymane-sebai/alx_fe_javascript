@@ -1,10 +1,8 @@
+// Simulated server URL (use JSONPlaceholder or another API for real implementation)
+const serverUrl = "https://jsonplaceholder.typicode.com/posts";
+
 // Array of quotes
-let quotes = [
-  { text: "The greatest glory in living lies not in never falling, but in rising every time we fall.", category: "Inspirational" },
-  { text: "Life is what happens when you're busy making other plans.", category: "Life" },
-  { text: "Get busy living or get busy dying.", category: "Motivational" },
-  { text: "You only live once, but if you do it right, once is enough.", category: "Life" }
-];
+let quotes = [];
 
 // Function to populate the categories in the dropdown
 function populateCategories() {
@@ -68,13 +66,75 @@ function addQuote() {
 
     // Inform the user
     alert("New quote added successfully!");
+
+    // Sync with the server
+    syncDataToServer();
   } else {
     alert("Please fill out both fields.");
   }
 }
 
+// Function to fetch data from the server
+async function fetchDataFromServer() {
+  try {
+    const response = await fetch(serverUrl);
+    const serverData = await response.json();
+
+    // Simulate server data structure
+    const serverQuotes = serverData.map(item => ({
+      text: item.title,
+      category: "Server"
+    }));
+
+    // Merge server data with local data (server takes precedence)
+    const uniqueServerQuotes = serverQuotes.filter(
+      serverQuote => !quotes.some(localQuote => localQuote.text === serverQuote.text)
+    );
+    quotes = [...quotes, ...uniqueServerQuotes];
+
+    populateCategories();
+    filterQuotes();
+    document.getElementById("syncStatus").textContent = "Data synced with the server.";
+  } catch (error) {
+    console.error("Error fetching data from server:", error);
+    document.getElementById("syncStatus").textContent = "Failed to sync data with the server.";
+  }
+}
+
+// Function to sync data to the server
+async function syncDataToServer() {
+  try {
+    const newQuotes = quotes.map(quote => ({
+      title: quote.text,
+      body: quote.category,
+      userId: 1
+    }));
+
+    await fetch(serverUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newQuotes)
+    });
+
+    document.getElementById("syncStatus").textContent = "Data successfully synced to the server.";
+  } catch (error) {
+    console.error("Error syncing data to server:", error);
+    document.getElementById("syncStatus").textContent = "Failed to sync data to the server.";
+  }
+}
+
 // Initialize the application
-window.addEventListener("DOMContentLoaded", () => {
+window.addEventListener("DOMContentLoaded", async () => {
+  // Load initial quotes
+  quotes = JSON.parse(localStorage.getItem("quotes")) || [
+    { text: "The greatest glory in living lies not in never falling, but in rising every time we fall.", category: "Inspirational" },
+    { text: "Life is what happens when you're busy making other plans.", category: "Life" }
+  ];
+
+  // Fetch data from the server
+  await fetchDataFromServer();
+
+  // Populate categories and display initial quotes
   populateCategories();
   filterQuotes();
 });

@@ -24,7 +24,7 @@ function showRandomQuote() {
 }
 
 // Function to add a new quote
-function addQuote() {
+function createAddQuoteForm() {
   const newQuoteText = document.getElementById('newQuoteText').value.trim();
   const newQuoteCategory = document.getElementById('newQuoteCategory').value.trim();
 
@@ -47,5 +47,5 @@ function addQuote() {
 // Add event listener to the "Show New Quote" button
 document.getElementById('newQuote').addEventListener('click', showRandomQuote);
 
-// Add event listener to the "Add Quote" button
+createAddQuoteForm();// Add event listener to the "Add Quote" button
 document.getElementById('addQuoteBtn').addEventListener('click', addQuote);

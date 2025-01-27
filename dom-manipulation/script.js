@@ -6,7 +6,7 @@ const quotes = [
 ];
 
 // Function to display a random quote
-function displayRandomQuote() {
+function showRandomQuote() {
   const quoteDisplay = document.getElementById('quoteDisplay');
 
   if (quotes.length === 0) {
@@ -45,7 +45,7 @@ function addQuote() {
 }
 
 // Add event listener to the "Show New Quote" button
-document.getElementById('newQuote').addEventListener('click', displayRandomQuote);
+document.getElementById('newQuote').addEventListener('click', showRandomQuote);
 
 // Add event listener to the "Add Quote" button
 document.getElementById('addQuoteBtn').addEventListener('click', addQuote);

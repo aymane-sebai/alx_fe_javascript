@@ -25,8 +25,8 @@ function showRandomQuote() {
 
 // Function to add a new quote
 function createAddQuoteForm() {
-  const newQuoteText = document.getElementById('newQuoteText').value.trim();
-  const newQuoteCategory = document.getElementById('newQuoteCategory').value.trim();
+  const newQuoteText = document.createElement('newQuoteText').value.trim();
+  const newQuoteCategory = document.createElement('newQuoteCategory').value.trim();
 
   if (!newQuoteText || !newQuoteCategory) {
     alert("Both quote and category fields are required.");
@@ -37,7 +37,7 @@ function createAddQuoteForm() {
 quotes.push({ text: newQuoteText, category: newQuoteCategory });
 
   // Update the DOM dynamically
-  const quoteDisplay = document.getElementById('quoteDisplay');
+  const quoteDisplay = document.createElement('quoteDisplay');
 
   // Clear previous content
   quoteDisplay.innerHTML = '';
